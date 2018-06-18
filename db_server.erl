@@ -1,5 +1,5 @@
 -module(db_server).
--export([start/0, start/2, start/1, stop/0]).
+-export([start/0, stop/1, start/1, stop/0]).
 -import(db_persistence, [read/1, save/2]).
 -import(db_operation, [select/2, add/2]).
 
@@ -17,40 +17,37 @@ serve_select(DB, Filters) ->
     throw:Reason -> {error, Reason}
   end.
 
-serve(DB, OutFile) ->
+serve(DB) ->
   receive
     {SenderPID, {add, Row}} -> 
       {Response, NewDB} = serve_add(DB, Row),
       SenderPID ! Response,
-      serve(NewDB, OutFile);
+      serve(NewDB);
     {SenderPID, {get, Filters}} ->
       Response = serve_select(DB, Filters),
       SenderPID ! Response,
-      serve(DB, OutFile);
-    {'EXIT', _, _} ->
+      serve(DB);
+    {'EXIT', _, {stop, OutFile}} ->
       ok = save(DB, OutFile)
   end.
   
-stop() ->
+stop(OutFile) ->
   case whereis(dbms) of 
     undefined -> throw("DBMS not started");
-    Pid -> exit(Pid, normal)
+    Pid -> exit(Pid, {stop, OutFile})
   end.
+
+stop() ->
+  stop(none).
   
-init(InFile, OutFile) ->
+init(InitialDB) ->
   process_flag(trap_exit, true),
-  serve(db_persistence:read(InFile), OutFile).
+  serve(InitialDB).
 
-init(OutFile) ->
-  process_flag(trap_exit, true),
-  serve([], OutFile).
-
-start(InFile, OutFile) ->
-  register(dbms, spawn(fun() -> init(InFile, OutFile) end)).
-  
-
-start(OutFile) -> 
-  register(dbms, spawn(fun() -> init(OutFile) end)).
+start(none) ->
+  register(dbms, spawn(fun() -> init([]) end));
+start(InFile) ->
+  register(dbms, spawn(fun() -> init(read(InFile)) end)).
   
 start() ->
   start(none).

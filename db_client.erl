@@ -15,8 +15,8 @@ basic_select() ->
 
 filter(_, any, Query) ->
   Query;
-filter(Field, Address, Query) ->
-  [ {Field, Address} | Query].
+filter(Field, Value, Query) ->
+  [ {Field, Value} | Query].
 
 
 select(Filters) ->
