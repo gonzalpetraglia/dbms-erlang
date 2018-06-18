@@ -10,7 +10,7 @@ add(Db, NewRow) ->
 filter_db(Db, {address, A}) ->
 	filter(Db, fun({_, Address, _}) -> A == Address end));
 filter_db(Db, {name, N}) ->
-	filter(Db, fun({_, Name, _}) -> N == Name end));
+	filter(Db, fun({Name, _, _}) -> N == Name end));
 filter_db(Db, {phone, Phone}) ->
 	filter(Db, fun({_, _, Phone}) -> P == Phone end));
 filter_db(_, F) ->
