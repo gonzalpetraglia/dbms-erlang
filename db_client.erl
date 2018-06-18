@@ -33,6 +33,5 @@ add({Name, Address, Phone}) ->
   execute({add, {Name, Address, Phone}}).
 
 connect_dbms(Node) ->
-  put(dbms_node, Node).
-
-  
+  put(dbms_node, Node),
+  ok.

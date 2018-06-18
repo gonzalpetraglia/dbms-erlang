@@ -19,7 +19,7 @@ serve_select(DB, Filters) ->
 
 serve(DB) ->
   receive
-    {SenderPID, {add, Row}} -> 
+    {SenderPID, {add, Row}} ->
       {Response, NewDB} = serve_add(DB, Row),
       SenderPID ! Response,
       serve(NewDB);
@@ -30,16 +30,16 @@ serve(DB) ->
     {'EXIT', _, {stop, OutFile}} ->
       ok = save(DB, OutFile)
   end.
-  
+
 stop(OutFile) ->
-  case whereis(dbms) of 
+  case whereis(dbms) of
     undefined -> throw("DBMS not started");
     Pid -> exit(Pid, {stop, OutFile})
   end.
 
 stop() ->
   stop(none).
-  
+
 init(InitialDB) ->
   process_flag(trap_exit, true),
   serve(InitialDB).
@@ -47,9 +47,8 @@ init(InitialDB) ->
 start(none) ->
   register(dbms, spawn(fun() -> init([]) end));
 start(InFile) ->
-  register(dbms, spawn(fun() -> init(read(InFile)) end)).
-  
+  InitialDB = read(InFile),
+  register(dbms, spawn(fun() -> init(InitialDB) end)).
+
 start() ->
   start(none).
-  
-
