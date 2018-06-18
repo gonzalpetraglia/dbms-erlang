@@ -1,9 +1,9 @@
 -module(db_operation).
 -export([add/2, select/2]).
 
-add(Db) ->
-	case member(Db, Element) of
-		false -> [Element | Db]
+add(Db, NewRow) ->
+	case member(Db, NewRow) of
+		false -> [NewRow | Db]
 		true -> throw("Duplicated entry")
 	end.
 
