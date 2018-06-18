@@ -1,29 +1,25 @@
 -module(db_operation).
--export([add/2, get/2]).
+-export([add/2, select/2]).
 
-
+add([{Name, Address, Phone} | _], {Name, Address, Phone}) ->
+	throw("Duplicated entry");
 add([], {Name, Address, Phone}) ->
 	[{Name, Address, Phone}];
-add([{Name, Address, Phone} | _], {Name, Address, Phone}) ->
-	{error, "Duplicated entry"};
 add([H | T], Row) ->
 	[H | add(T, Row)].
 
-apply_single_filter([], _) ->
+filter_db([], _) ->
 	[];
-apply_single_filter([{Name, Address, Phone} | T], {address, Address}) ->
-	[{Name, Address, Phone} | apply_single_filter(T, {address, Address})];
-apply_single_filter([{Name, Address, Phone} | T], {name, Name}) ->
-		[{Name, Address, Phone} | apply_single_filter(T, {name, Name})];
-apply_single_filter([{Name, Address, Phone} | T], {phone, Phone}) ->
-		[{Name, Address, Phone} | apply_single_filter(T, {phone, Phone})];
-apply_single_filter([_ | T], F) ->
-		apply_single_filter(T, F).
+filter_db([{Name, Address, Phone} | T], {address, Address}) ->
+	[{Name, Address, Phone} | filter_db(T, {address, Address})];
+filter_db([{Name, Address, Phone} | T], {name, Name}) ->
+	[{Name, Address, Phone} | filter_db(T, {name, Name})];
+filter_db([{Name, Address, Phone} | T], {phone, Phone}) ->
+	[{Name, Address, Phone} | filter_db(T, {phone, Phone})];
+filter_db([_ | T], F) ->
+	filter_db(T, F).
 	
-apply_filters(Db, []) ->
+select(Db, []) ->
 	Db;
-apply_filters(Db, [H | T]) ->
-	apply_filters(apply_single_filter(Db, H), T).
-
-get(Db, Filters) ->
-	apply_filters(Db, Filters).
+select(Db, [HeadFilter | TailFilters]) ->
+	select(filter_db(Db, HeadFilter), TailFilters).

@@ -1,21 +1,38 @@
 -module(db_client).
--export([get/1, add/1, help/1]).
-% http://erlang.org/documentation/doc-5.3/doc/getting_started/getting_started.html
+-export([select/1, add/1, select_by_tuple/1, basic_select/0, filter/3, connect_dbms/1]).
 
 execute(Operation) ->
-  (dbms, Process) ! {node(), self(), Operation},
+  {dbms, get(dbms_node)} ! {self(), Operation},
   receive
-    {ok, Result} -> Result;
-    {error, Error} -> error Error
-  after 5000
-    error "Cant get response from dbms"
+    {error, Error} -> throw(Error);
+    Response -> Response
+  after
+    5000 -> throw("Cant get response from dbms")
   end.
 
-get(Filters) ->
+basic_select() ->
+  [].
+
+filter(_, any, Query) ->
+  Query;
+filter(Field, Address, Query) ->
+  [ {Field, Address} | Query].
+
+
+select(Filters) ->
   execute({get, Filters}).
 
-add(Row) ->
-  execute({add, Row}).
+select_by_tuple({Name, Address, Phone}) ->
+    Q = basic_select(),
+    Q1 = filter(name, Name, Q),
+    Q2 = filter(address, Address, Q1),
+    Q3 = filter(phone, Phone, Q2),
+    select(Q3).
 
+add({Name, Address, Phone}) ->
+  execute({add, {Name, Address, Phone}}).
+
+connect_dbms(Node) ->
+  put(dbms_node, Node).
 
   
