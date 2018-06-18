@@ -1,24 +1,21 @@
 -module(db_operation).
 -export([add/2, select/2]).
 
-add([{Name, Address, Phone} | _], {Name, Address, Phone}) ->
-	throw("Duplicated entry");
-add([], {Name, Address, Phone}) ->
-	[{Name, Address, Phone}];
-add([H | T], Row) ->
-	[H | add(T, Row)].
+add(Db) ->
+	case member(Db, Element) of
+		false -> [Element | Db]
+		true -> throw("Duplicated entry")
+	end.
 
-filter_db([], _) ->
-	[];
-filter_db([{Name, Address, Phone} | T], {address, Address}) ->
-	[{Name, Address, Phone} | filter_db(T, {address, Address})];
-filter_db([{Name, Address, Phone} | T], {name, Name}) ->
-	[{Name, Address, Phone} | filter_db(T, {name, Name})];
-filter_db([{Name, Address, Phone} | T], {phone, Phone}) ->
-	[{Name, Address, Phone} | filter_db(T, {phone, Phone})];
-filter_db([_ | T], F) ->
-	filter_db(T, F).
-	
+filter_db(Db, {address, A}) ->
+	filter(Db, fun({_, Address, _}) -> A == Address end));
+filter_db(Db, {name, N}) ->
+	filter(Db, fun({_, Name, _}) -> N == Name end));
+filter_db(Db, {phone, Phone}) ->
+	filter(Db, fun({_, _, Phone}) -> P == Phone end));
+filter_db(_, F) ->
+	throw("Unvalid field").
+
 select(Db, []) ->
 	Db;
 select(Db, [HeadFilter | TailFilters]) ->

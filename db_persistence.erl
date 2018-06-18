@@ -6,7 +6,7 @@ read(File) ->
     {ok, Result} -> Result;
     {error, Error} -> throw(Error)
     end.
-    
+
 save(_, none) ->
     ok;
 save(Db, File) ->

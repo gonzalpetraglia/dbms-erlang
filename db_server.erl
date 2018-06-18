@@ -23,7 +23,7 @@ serve(DB) ->
       {Response, NewDB} = serve_add(DB, Row),
       SenderPID ! Response,
       serve(NewDB);
-    {SenderPID, {get, Filters}} ->
+    {SenderPID, {select, Filters}} ->
       Response = serve_select(DB, Filters),
       SenderPID ! Response,
       serve(DB);

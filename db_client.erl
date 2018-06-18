@@ -20,7 +20,7 @@ filter(Field, Value, Query) ->
 
 
 select(Filters) ->
-  execute({get, Filters}).
+  execute({select, Filters}).
 
 select_by_tuple({Name, Address, Phone}) ->
     Q = basic_select(),
