@@ -1,10 +1,21 @@
 -module(db_persistence).
 -export([save/2, read/1]).
 
+is_a_triple({_,_,_}) ->
+    true;
+is_a_triple(_) ->
+    false.
+
 read(File) ->
-    case file:consult(File) of
-    {ok, Result} -> Result;
-    {error, Error} -> throw(Error)
+    Result = file:consult(File),
+    case Result of
+        {ok, List} -> List;
+        {error, Error} -> throw(Error)
+    end,
+    {ok, Db} = Result, 
+    case lists:all(fun(X) -> is_a_triple(X) end, Db) of
+        true -> Db;
+        false -> throw("Invalid DB")
     end.
 
 save(_, none) ->
