@@ -36,7 +36,7 @@ Una vez dentro de la consola de erlang se debe importar el modulo, lo que podemo
 
 Una vez hecho esto tenemos la interfaz provista para administrar el DBMS, la cual consiste de las siguientes funciones:
 
- - connect_dbms(DBMSNode) : Este comando se debe correr al inicio para definir en que nodo esta corriendo el server que utilizaremos*.
+ - define_dbms_node(DBMSNode) : Este comando se debe correr al inicio para definir en que nodo esta corriendo el server que utilizaremos*.
  - add({Name, Address, Phone}) :  Agrega la tupla dada a la base de datos.
  - select_by_tuple({Name, Address, Phone}) : Se hace una búsqueda de los registros que coincidan con la tupla dada. Cualquier parámetro puede ser reemplazado por el átomo 'any' para que no se filtre por este campo.
 
