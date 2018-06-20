@@ -7,14 +7,16 @@ serve_add(DB, NewRow) ->
   try add(DB, NewRow) of
     NewDB -> {ok, NewDB}
   catch
-    throw:Reason -> {{error, Reason}, DB}
+    throw:Reason -> {{error, Reason}, DB};
+    error:function_clause -> {{error, "Not a triple"}, DB}
   end.
 
 serve_select(DB, Filters) ->
   try select(DB, Filters) of
     Result -> Result
   catch
-    throw:Reason -> {error, Reason}
+    throw:Reason -> {error, Reason};
+    error:function_clause -> {error, "Invalid filters"}
   end.
 
 serve(DB) ->
