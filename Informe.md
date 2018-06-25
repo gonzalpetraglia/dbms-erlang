@@ -17,8 +17,15 @@ Realizador:
 
 ## Análisis
 
+En este TP se implementara un gestor de bases de datos muy simplificado utilizando la herramienta de colas.
 
+Para que la implementación sea utilizable, se necesita que haya alguna manera de interactuar con el mismo tanto para administrar el servidor como para ejecutar acciones desde el cliente. Además, todo esto debe suceder concurrentemente. La interfaz mas fácil de implementar es una linea de comandos, para lo cual la shell de erlang sera de gran ayuda. 
 
+### Casos de uso
+
+En la siguiente figura se muestran los casos de uso de este sistema:
+
+![alt text](./casos_de_uso.png)
 
 
 
@@ -52,7 +59,6 @@ En el primer caso la comunicación debe ser bidireccional e iniciada por el clie
 En el segundo caso la comunicación puede ser unidireccional, ya que solo es necesaria para que la shell pueda parar el servidor.
 
 Este esquema se ve representado por la siguiente figura:
-
 
 ![alt text](./Procesos.png)
 
