@@ -1,15 +1,22 @@
 
-# Informe
 
-Resolución del TP 2 de la materia Técnicas de Programación Concurrentes I.
+# Técnicas de Programación Concurrentes I
+# TP 2 
 
-Grupo:
-Gonzalo Leonel Petraglia 97811
------------->>>>>>>>>><<<<<<<<---------
+JTP:
 
-## Analisis
+    Ing. Pablo Deymonnaz
 
----------->>>>>>>>>>>><<<<<<<<<<<<<----------
+Realizador:
+ 
+    Gonzalo Leonel Petraglia
+
+    Padrón: 97811
+
+
+
+## Análisis
+
 
 
 
@@ -18,7 +25,7 @@ Gonzalo Leonel Petraglia 97811
 ## 1. Procesos
 La implementación brindada consta de 3 procesos:
 
- 1. La shell del cliente
+ 1. La shell del cliente (se espera que haya varios clientes por cada servidor)
  1. La shell del servidor
  1. El servidor
 
@@ -44,27 +51,32 @@ En el primer caso la comunicación debe ser bidireccional e iniciada por el clie
 
 En el segundo caso la comunicación puede ser unidireccional, ya que solo es necesaria para que la shell pueda parar el servidor.
 
+Este esquema se ve representado por la siguiente figura:
+
+
+![alt text](./Procesos.png)
+
 ## 3. Protocolo de comunicación
 
-El cliente enviara al servidor mensajes a través del operador ! donde el mensaje esta formado por una tupla donde el primer elemento es el PID del cliente y el segundo (y último) elemento es la operación. Luego, el servidor enviara la respuesta mediante el mismo operador al PID recibido.
+El cliente enviara al servidor mensajes a través del operador ! donde el mensaje esta formado por una dupla donde el primer elemento es el PID del cliente y el segundo elemento es la operación. Luego, el servidor enviara la respuesta mediante el mismo operador al PID recibido.
 
 Las operaciones posibles y sus respuestas son las siguientes:
 
 ### Add
 
-El esquema básico del mensaje de la operación add es el de una tupla donde el primer elemento es el átomo add y el segundo (y último) elemento es la tupla a agregar.
+El esquema básico del mensaje de la operación add es el de una dupla donde el primer elemento es el átomo add y el segundo elemento es la terna a agregar.
 Ejemplo:
 
 > {add, {"Gonzalo", "Corrientes 223", "4444"}}
 
-La respuesta puede ser el átomo ok o una tupla formada por el átomo error y el error.
+La respuesta puede ser el átomo ok o una dupla formada por el átomo error y el error.
 Ejemplo:
 
 > {error, "Duplicated entry"}
 
 ### Select
 
-El esquema básico del mensaje de la operación select es el de una tupla de dos elementos, siendo el primero el átomo select y el segundo los filtros a aplicar.
+El esquema básico del mensaje de la operación select es el de una dupla, siendo el primero el átomo select y el segundo los filtros a aplicar.
 Ejemplo:
 
 > {get, [{address, "Corrientes 223"}, {name, "Gonzalo"}]}
