@@ -1,3 +1,3 @@
-rm *.beam
-rm erl_crash.dump
-rm *.txt
+rm -f *.beam
+rm -f erl_crash.dump
+rm -f *.txt
