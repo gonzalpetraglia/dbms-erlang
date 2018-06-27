@@ -12,7 +12,7 @@ filter_db(Db, {address, A}) ->
 filter_db(Db, {name, N}) ->
 	lists:filter(fun({Name, _, _}) -> N == Name end, Db);
 filter_db(Db, {phone, P}) ->
-	lists:filter(Db, fun({_, _, Phone}) -> P == Phone end, Db).
+	lists:filter(fun({_, _, Phone}) -> P == Phone end, Db).
 
 select(Db, []) ->
 	Db;
