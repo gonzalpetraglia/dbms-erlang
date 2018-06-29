@@ -14,7 +14,6 @@ Realizador:
     Padrón: 97811
 
 
-
 ## Análisis
 
 En este TP se implementara un gestor de bases de datos muy simplificado utilizando la herramienta de colas.
@@ -25,7 +24,7 @@ Para que la implementación sea utilizable, se necesita que haya alguna manera d
 
 En la siguiente figura se muestran los casos de uso de este sistema:
 
-![alt text](./casos_de_uso.png)
+![alt text](./images/casos_de_uso.png)
 
 
 
@@ -60,7 +59,7 @@ En el segundo caso la comunicación puede ser unidireccional, ya que solo es nec
 
 Este esquema se ve representado por la siguiente figura:
 
-![alt text](./Procesos.png)
+![alt text](./images/Procesos.png)
 
 ## 3. Protocolo de comunicación
 
@@ -95,4 +94,4 @@ La respuestas posibles son similares a la de la operación add.
 
 No existe un diagrama de clases dada la naturaleza funcional de erlang, en cambio se presenta un diagrama de módulos.
 
-![alt text](./modules_diagram.png)
+![alt text](./images/modules_diagram.png)
