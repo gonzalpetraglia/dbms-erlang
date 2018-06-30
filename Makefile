@@ -17,7 +17,7 @@ run-server: all
 	$(ERL) -sname dbms -run db_server start $(DBFILE)
 
 run-client: all
-	$(ERL) -sname $(addsuffix $(CLIENTID), client) -run db_client define_dbms_node $(DBNODE)
+	$(ERL) -sname $(addsuffix $(CLIENTID), client) -run db_client start $(DBNODE)
 
 clean:
 	rm -f *.beam
