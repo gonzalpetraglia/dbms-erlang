@@ -33,7 +33,7 @@ add({Name, Address, Phone}) ->
   execute({add, {Name, Address, Phone}}).
 
 start(Node) ->
-  put(dbms_node, "dbms@HP"),
+  put(dbms_node, Node),
   ok.
 
 
