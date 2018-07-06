@@ -5,7 +5,7 @@ ERLFILES := $(wildcard *.erl)
 BEAMFILES := $(ERLFILES:.erl=.beam) 
 
 DBFILE =
-DBNODE =
+DBNAME = 'dbms'
 CLIENTID =
 
 all: $(BEAMFILES)
@@ -14,10 +14,10 @@ $(BEAMFILES): $(ERLFILES)
 	$(ERLC) $(ERLFILES)
 
 run-server: all
-	$(ERL) -sname dbms -run db_server start $(DBFILE)
+	$(ERL) -sname $(DBNAME) -run db_server start $(DBFILE)
 
 run-client: all
-	$(ERL) -sname $(addsuffix $(CLIENTID), client) -run db_client start $(DBNODE)
+	$(ERL) -sname $(addsuffix $(CLIENTID), client) -run db_client start
 
 clean:
 	rm -f *.beam

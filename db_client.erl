@@ -1,5 +1,5 @@
 -module(db_client).
--export([select/1, add/1, select_by_tuple/1, basic_select/0, filter/3, start/1]).
+-export([select/1, add/1, select_by_tuple/1, basic_select/0, filter/3, start/0, start/1]).
 
 execute(Operation) ->
   {dbms, get(dbms_node)} ! {self(), Operation},
@@ -31,6 +31,9 @@ select_by_tuple({Name, Address, Phone}) ->
 
 add({Name, Address, Phone}) ->
   execute({add, {Name, Address, Phone}}).
+
+start() ->
+  ok.
 
 start(Node) ->
   put(dbms_node, Node),
