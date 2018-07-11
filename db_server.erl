@@ -4,53 +4,51 @@
 -import(db_operation, [select/2, add/2]).
 
 serve_add(DB, NewRow) ->
-  try add(DB, NewRow) of
-    NewDB -> {ok, NewDB}
-  catch
-    throw:Reason -> {{error, Reason}, DB};
-    error:function_clause -> {{error, "Not a triple"}, DB}
-  end.
+    try add(DB, NewRow) of
+        NewDB -> {ok, NewDB}
+    catch
+        throw:Reason -> {{error, Reason}, DB};
+        error:function_clause -> {{error, "Not a triple"}, DB}
+    end.
 
 serve_select(DB, Filters) ->
-  try select(DB, Filters) of
-    Result -> Result
-  catch
-    throw:Reason -> {error, Reason};
-    error:function_clause -> {error, "Invalid filters"}
-  end.
+    try select(DB, Filters) of
+        Result -> Result
+    catch
+        throw:Reason -> {error, Reason};
+        error:function_clause -> {error, "Invalid filters"}
+    end.
 
 serve(DB) ->
-  receive
-    {SenderPID, {add, Row}} ->
-      {Response, NewDB} = serve_add(DB, Row),
-      SenderPID ! Response,
-      serve(NewDB);
-    {SenderPID, {select, Filters}} ->
-      Response = serve_select(DB, Filters),
-      SenderPID ! Response,
-      serve(DB);
-    {'EXIT', _, {stop, OutFile}} ->
-      ok = save(DB, OutFile)
-  end.
+    receive
+        {SenderPID, {add, Row}} ->
+          {Response, NewDB} = serve_add(DB, Row),
+          SenderPID ! Response,
+          serve(NewDB);
+        {SenderPID, {select, Filters}} ->
+          Response = serve_select(DB, Filters),
+          SenderPID ! Response,
+          serve(DB);
+        {'EXIT', _, {stop, OutFile}} ->
+          ok = save(DB, OutFile)
+    end.
 
 stop(OutFile) ->
-  case whereis(dbms) of
-    undefined -> throw("DBMS not started");
-    Pid -> exit(Pid, {stop, OutFile})
-  end.
-
+    case whereis(dbms) of
+        undefined -> throw("DBMS not started");
+        Pid -> exit(Pid, {stop, OutFile})
+    end.
 stop() ->
-  stop(none).
+    stop(none).
 
 init(InitialDB) ->
-  process_flag(trap_exit, true),
-  serve(InitialDB).
+    process_flag(trap_exit, true),
+    serve(InitialDB).
 
 start(none) ->
-  register(dbms, spawn(fun() -> init([]) end));
+    register(dbms, spawn(fun() -> init([]) end));
 start(InFile) ->
-  InitialDB = read(InFile),
-  register(dbms, spawn(fun() -> init(InitialDB) end)).
-
+    InitialDB = read(InFile),
+    register(dbms, spawn(fun() -> init(InitialDB) end)).
 start() ->
-  start(none).
+    start(none).
