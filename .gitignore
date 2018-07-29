@@ -1,3 +1,4 @@
 *.beam
 *.txt
 *.swp
+*.dump

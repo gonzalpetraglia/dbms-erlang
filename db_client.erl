@@ -1,26 +1,25 @@
 -module(db_client).
--export([select/1, add/1, select_by_tuple/1, basic_select/0, filter/3, define_dbms_node/1]).
+-export([select/1, add/1, select_by_tuple/1, basic_select/0, filter/3, start/0, start/1]).
 
 execute(Operation) ->
-  {dbms, get(dbms_node)} ! {self(), Operation},
-  receive
-    {error, Error} -> throw(Error);
-    Response -> Response
-  after
-    5000 -> throw("Cant get response from dbms")
-  end.
+    {dbms, get(dbms_node)} ! {self(), Operation},
+    receive
+        {error, Error} -> throw(Error);
+        Response -> Response
+    after
+        5000 -> throw("Can´t get response from dbms")
+    end.
 
 basic_select() ->
-  [].
+    [].
 
 filter(_, any, Query) ->
-  Query;
+    Query;
 filter(Field, Value, Query) ->
-  [ {Field, Value} | Query].
-
+    [{Field, Value} | Query].
 
 select(Filters) ->
-  execute({select, Filters}).
+    execute({select, Filters}).
 
 select_by_tuple({Name, Address, Phone}) ->
     Q = basic_select(),
@@ -30,8 +29,11 @@ select_by_tuple({Name, Address, Phone}) ->
     select(Q3).
 
 add({Name, Address, Phone}) ->
-  execute({add, {Name, Address, Phone}}).
+    execute({add, {Name, Address, Phone}}).
 
-define_dbms_node(Node) ->
-  put(dbms_node, Node),
-  ok.
+start() ->
+    ok.
+start(Node) ->
+    put(dbms_node, Node),
+    ok.
+
