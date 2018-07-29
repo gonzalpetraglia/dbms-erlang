@@ -1,6 +1,6 @@
 # dbms-erlang
 
-Este es el TP N°2 de Técnicas de Programación Concurrentes I. En este se implemento un pequeño gestor de base de datos, asi como también un pequeño cliente para el mismo. Ambos fueron desarrollados en **Erlang**.
+Este es el TP N°2 de Técnicas de Programación Concurrentes I. En éste se implementó un pequeño gestor de base de datos, asi como también un pequeño cliente para el mismo. Ambos fueron desarrollados en **Erlang**.
 
 ## Ejecución
 
